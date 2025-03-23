@@ -1,13 +1,14 @@
-# Etapa 1: Construcción
+# Etapa 1: Construcción del .jar
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . .
-RUN gradle build --no-daemon
+WORKDIR /app/demo
+RUN gradle build --no-daemon --stacktrace
 
-# Etapa 2: Ejecución
+# Etapa 2: Contenedor final para ejecutar la app
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/demo/build/libs/*.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
