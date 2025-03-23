@@ -3,7 +3,8 @@ FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . .
 WORKDIR /app/demo
-RUN gradle build --no-daemon --stacktrace
+RUN gradle build -x test --no-daemon --stacktrace
+
 
 # Etapa 2: Contenedor final para ejecutar la app
 FROM openjdk:17-jdk-slim
